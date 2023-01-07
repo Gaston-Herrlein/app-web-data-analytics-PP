@@ -36,16 +36,38 @@ Pedidos = Pedidos.drop (["seguimiento pedidos", "Unnamed: 3", "Unnamed: 5", "Unn
 Pedidos = Pedidos.rename (columns = {"Unnamed: 0": "Codigo", "Unnamed: 2": "Fecha Pedido", "Unnamed: 4": "Cantidad", "Unnamed: 8": "Estado", "Unnamed: 10": "¿Recibidos?", "Unnamed: 12": "Demora"}); 
 Pedidos = Pedidos.astype ({"Codigo": "int32", "Cantidad": "float64"}); 
 
+
 #print (DataBase); 
 #DataLong = DataBase.shape [1]; 
 
-codigos = Salida.iloc [:513, 0]; 
+"""
+codigos = Salida ["Codigo"]; 
 print (codigos);   
+"""
+
 #ESTE FOR SE PODRIA METER EN UNA FUNCION PARA REUTILIZARLO CON EL df DE ENTRADA 
 #Para recorrer las columnas
-"""
-for index in range (Salida.shape [1]):
-    #Aca tiene que ir un algoritmo que encuentre los codigos repetidos y agrupe sus posiciones en una lista para operar mas facil sobre ellos
-    codigos [index] = Salida.iloc [index, 0]; 
-print (codigos); 
-"""
+codigos = []; 
+aux = [];  
+fechas = [];  
+
+Salida = Salida.sort_values ("Codigo");  #Ordenamos la lista para trabajar
+
+#Aprovechando que Pandas nos deja operar con datos de tipo DataTime operamos sobre las fechas para obtener la frecuencia de uso 
+# Para recorrer todo el dataframe -->"Salida.shape [0]
+for index in range (0,7):
+    if index!=0:
+        if Salida.iloc [index, 0]==Salida.iloc [(index-1), 0]:
+             aux.append (Salida.iloc [index, 1]-Salida.iloc [index-1, 1]); 
+        else:
+            codigos.append (Salida.iloc [index, 0]);  
+            print (aux); 
+            print ("\n"); 
+            fechas.append (aux); 
+            print (aux); 
+            #print (fechas); 
+            print ("\n \n"); 
+            aux.clear();  
+    else:
+        codigos.append (Salida.iloc [index, 0]); 
+
